@@ -60,9 +60,11 @@ jobs:
           mkdir -p ~/.local/bin
           mv ./kubectl ~/.local/bin/kubectl
           kubectl version --client
+          eksctl version
       - name: Create clusters
         working-directory: ${{ github.repository }}
         run: |
+          AWS_K8S_VERSION=$(echo $AWS_K8S_VERSION | cut -d '.' -f 1,2)
           sed -i "s/NSM_CLUSTER_NAME/$AWS_CLUSTER_NAME/g" aws-${{ matrix.ip_family }}.yaml
           sed -i "s/NSM_REGION/$AWS_REGION/g" aws-${{ matrix.ip_family }}.yaml
           sed -i "s/NSM_NODEGROUPS_NAME/$AWS_CLUSTER_NAME-workers/g" aws-${{ matrix.ip_family }}.yaml
